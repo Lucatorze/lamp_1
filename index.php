@@ -5,6 +5,7 @@ session_start();
 if(isset($_POST['logout'])){
 
     unset($_SESSION['user']);
+    unset($_SESSION['userid']);
 
 }
 
@@ -51,8 +52,23 @@ if(isset($_POST['username'])){
     else{
 
         $_SESSION['user'] = $result["login"];
-        $_SESSION['nb'] = $result["nb"];
-        $_SESSION['coup'] = $result["coup"];
+        $_SESSION['userid'] = $result["id"];
+
+        if($result['save_rand'] === null){
+
+            $_SESSION['nb'] = $result["nb"];
+            $_SESSION['coup'] = $result["coup"];
+
+        }
+        else{
+
+            $_SESSION['nb'] = $result["nb"];
+            $_SESSION['coup'] = $result["coup"];
+            $_SESSION['bol'] = $result["save_rand"];
+            $_SESSION['nombre_envoi'] = $result["save_coup"];
+
+        }
+
         header("Location: /game.php");
         exit;
 
@@ -67,6 +83,7 @@ if(isset($_POST['username'])){
 
     <meta charset="UTF-8">
     <title>Des papier dans un bol</title>
+    <link rel="stylesheet" href="style.css">
 
 </head>
 <body>
