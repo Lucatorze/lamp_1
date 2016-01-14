@@ -1,12 +1,65 @@
-table{
+@import url(http://fonts.googleapis.com/css?family=Orbitron:500);
+
+body {
+
+    margin: 0;
+
+}
+
+#header {
+
+    text-align: center;
+    font-size: 50px;
+
+}
+
+#content {
+
+    max-height: auto;
+    width: 850px;
+    box-shadow: 0 0 20px 1px black;
+    margin: 30px auto 30px auto;
+    padding: 15px;
+    text-align: center;
+}
+
+#content2 {
+
+    height: 550px;
+    width: 850px;
+    box-shadow: 0 0 20px 1px black;
+    margin: 30px auto 30px auto;
+    padding: 15px;
+    text-align: center;
+    overflow-y: scroll;
+}
+
+.screen {
+
+    height: 50px;
+    width: 300px;
+    background: linear-gradient(to right, #bac4a6, #929587);
+    box-shadow: inset 5px 5px 20px 0 #656565;
+    border-radius: 10px;
+    padding: 15px 10px 15px 10px;
+    margin: 30px auto 30px auto;
+    text-align: center;
+    font-size: 12px;
+    font-family: 'Orbitron', sans-serif;
+
+}
+
+table {
 
     border: 1px solid black;
     border-collapse: collapse;
     text-align: center;
-
+    margin-left: auto;
+    margin-right: auto;
 
 }
-td,th{
+
+td, th {
 
     border: 1px solid black;
     padding: 5px;

@@ -2,14 +2,14 @@
 require_once("config/dbconf.php");
 session_start();
 
-if(isset($_POST['logout'])){
+if (isset($_POST['logout'])) {
 
     unset($_SESSION['user']);
     unset($_SESSION['userid']);
 
 }
 
-if(isset($_SESSION['user'])){
+if (isset($_SESSION['user'])) {
 
     header("Location: /game.php");
     exit;
@@ -18,49 +18,42 @@ if(isset($_SESSION['user'])){
 
 $errormessage = null;
 
-if(isset($_POST['username'])){
+if (isset($_POST['username'])) {
 
     global $config;
     $pdo = new PDO($config['host'], $config['user'], $config['password']);
 
     $stmt = $pdo->prepare("SELECT * FROM users WHERE login = :login");
 
-    $stmt->bindParam("login",$_POST['username']);
+    $stmt->bindParam("login", $_POST['username']);
     $stmt->execute();
     $result = $stmt->fetch();
 
     $passwordCrypt = sha1($_POST["password"]);
 
-    if($result === false){
+    if ($result === false) {
 
         $errormessage = "Wrong username";
 
-    }
-
-    elseif (empty($passwordCrypt)){
+    } elseif (empty($passwordCrypt)) {
 
         $errormessage = "No Password";
 
-    }
-
-    elseif($passwordCrypt != $result["password"]){
+    } elseif ($passwordCrypt != $result["password"]) {
 
         $errormessage = "Wrong password";
 
-    }
-
-    else{
+    } else {
 
         $_SESSION['user'] = $result["login"];
         $_SESSION['userid'] = $result["id"];
 
-        if($result['save_rand'] === null){
+        if ($result['save_rand'] === null) {
 
             $_SESSION['nb'] = $result["nb"];
             $_SESSION['coup'] = $result["coup"];
 
-        }
-        else{
+        } else {
 
             $_SESSION['nb'] = $result["nb"];
             $_SESSION['coup'] = $result["coup"];
@@ -99,7 +92,7 @@ Merci de vous connecter :
 
 </form>
 
-<?php echo $errormessage;?>
+<?php echo $errormessage; ?>
 
 </body>
 </html>

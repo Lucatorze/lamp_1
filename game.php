@@ -5,15 +5,14 @@ session_start();
 global $config;
 $pdo = new PDO($config['host'], $config['user'], $config['password']);
 
-if(!isset($_SESSION['user'])){
+if (!isset($_SESSION['user'])) {
 
     header("Location: /index.php");
     exit;
 
 }
 
-if(empty($_SESSION['bol']) || empty($_SESSION['nombre_envoi']) || isset($_POST['reset']))
-{
+if (empty($_SESSION['bol']) || empty($_SESSION['nombre_envoi']) || isset($_POST['reset'])) {
     $_SESSION['bol'] = mt_rand(0, 100);
     $_SESSION['nombre_envoi'] = 0;
     $response = "Entrez un nombre pour commencer<br><br>";
@@ -22,9 +21,9 @@ if(empty($_SESSION['bol']) || empty($_SESSION['nombre_envoi']) || isset($_POST['
 
 $response = null;
 
-if(isset($_POST['resetbest'])){
+if (isset($_POST['resetbest'])) {
 
-    $stmt = $pdo->prepare("update users set nb = NULL ,coup = NULL where id=".$_SESSION['userid']);
+    $stmt = $pdo->prepare("update users set nb = NULL ,coup = NULL where id=" . $_SESSION['userid']);
     $stmt->execute();
 
     unset($_SESSION['nb']);
@@ -32,56 +31,54 @@ if(isset($_POST['resetbest'])){
 
 }
 
-if(isset($_POST['guess'])){
+if (isset($_POST['guess'])) {
 
-    if (!isset($_SESSION['nombre_envoi'])){
+    if (!isset($_SESSION['nombre_envoi'])) {
 
         $_SESSION['nombre_envoi'] = 1;
 
-    }
-    else{
+    } else {
 
-        $_SESSION['nombre_envoi'] ++;
+        $_SESSION['nombre_envoi']++;
 
     }
 }
 
-if(!isset($_POST['guess']) || isset($_POST['reset']) || empty($_SESSION['bol'])){
+if (!isset($_POST['guess']) || isset($_POST['reset'])) {
 
     $response = "Entrez un nombre pour commencer<br><br>";
 
-}
-else{
+} else {
 
     $guess = $_POST['guess'];
 
-    if($guess > $_SESSION['bol']){
+    if ($guess > $_SESSION['bol']) {
 
-        $response = "Ce n'est pas ".$guess.", c'est moins !<br><br>";
+        $response = "Ce n'est pas " . $guess . ", c'est moins !<br><br>";
 
-    }
-    elseif($guess < $_SESSION['bol']){
+    } elseif ($guess < $_SESSION['bol']) {
 
-        $response = "Ce n'est pas ".$guess.", c'est plus !<br><br>";
+        $response = "Ce n'est pas " . $guess . ", c'est plus !<br><br>";
 
-    }
-    else{
+    } else {
 
-        $response = "C'est gagné ! c'est bien le nombre ".$guess.", vous l'avez trouver en ".$_SESSION['nombre_envoi']." cliques !<br><br>";
+        $response = "C'est gagné ! c'est bien le nombre " . $guess . ", vous l'avez trouver en " . $_SESSION['nombre_envoi'] . " propositions !<br><br>";
 
-        $stmt = $pdo->prepare("update users set save_rand=NULL ,save_coup=NULL where id=".$_SESSION['userid']);
+        $stmt = $pdo->prepare("update users set save_rand=NULL ,save_coup=NULL where id=" . $_SESSION['userid']);
         $stmt->execute();
 
-        if($_SESSION['nombre_envoi'] < $_SESSION['coup'] || empty($_SESSION['coup'])){
+        $stmt = $pdo->prepare("INSERT INTO histo VALUES('', '" . $_SESSION['userid'] . "', '" . $guess . "', '" . $_SESSION['nombre_envoi'] . "', '" . time() . "')");
+        $stmt->execute();
+
+        if ($_SESSION['nombre_envoi'] < $_SESSION['coup'] || empty($_SESSION['coup'])) {
 
             $_SESSION['nb'] = $guess;
             $_SESSION['coup'] = $_SESSION['nombre_envoi'];
 
-            $stmt = $pdo->prepare("update users set nb=".$_SESSION['nb'].",coup=".$_SESSION['coup']." where id=".$_SESSION['userid']);
+            $stmt = $pdo->prepare("update users set nb=" . $_SESSION['nb'] . ",coup=" . $_SESSION['coup'] . " where id=" . $_SESSION['userid']);
             $stmt->execute();
 
-        }
-        else{
+        } else {
 
             unset($_SESSION['bol']);
             unset($_SESSION['nombre_envoi']);
@@ -94,12 +91,13 @@ else{
     }
 
 
-
 }
 
-if(isset($_POST['save'])){
+if (isset($_POST['save'])) {
 
-    $stmt = $pdo->prepare("update users set save_rand =".$_SESSION['bol'].",save_coup = ".$_SESSION['nombre_envoi']." where id=".$_SESSION['userid']);
+    $response = "Partie sauvegardé !<br><br>";
+
+    $stmt = $pdo->prepare("update users set save_rand =" . $_SESSION['bol'] . ",save_coup = " . $_SESSION['nombre_envoi'] . " where id=" . $_SESSION['userid']);
     $stmt->execute();
 
 }
@@ -117,12 +115,11 @@ if(isset($_POST['save'])){
 
     <script>
 
-        window.onload = function(){
+        window.onload = function () {
 
             document.getElementById('input').focus();
 
         }
-
 
 
     </script>
@@ -130,76 +127,122 @@ if(isset($_POST['save'])){
 </head>
 <body>
 
-<?php echo $response;?>
+<div id="header">
 
+    Plus ou Moins ?
 
-<form method="POST">
+</div>
 
-    <input type="text" name="guess" id="input">
-    <input type="submit" name="Envoi">
-    <input type="submit" name="reset" value="Reset">
+<div id="content">
 
-</form>
+    <div class="screen">
 
-<form method="POST">
+        <?php echo $response; ?>
 
-    <input type="submit" name="save" value="Sauvegarder">
+    </div>
 
-</form>
+    <form method="POST">
 
-<br><br>
+        <input type="text" name="guess" id="input"><br><br>
+        <input type="submit" name="Envoi">
+        <input type="submit" name="reset" value="Reset">
+        <input type="submit" name="save" value="Sauvegarder">
 
-Meilleur score pour <b><?php echo $_SESSION['user'];?></b>: <?php
+    </form>
 
-if(empty($_SESSION['nb']) && empty($_SESSION['coup'])){
+    <br><br>
 
-    echo 'Pas de meilleur score';
+    Meilleur score pour <b><?php echo $_SESSION['user']; ?></b>:
 
-}
-else{
-
-    echo $_SESSION['nb'].' en '.$_SESSION['coup'].' coups ! <form method="POST"><input type="submit" name="resetbest" value="Reset Score"></form>';
-
-
-}
-
-
-?><br><br>
-
-<b><u>LeaderBoard :</u></b><br><br>
-
-<table>
-
-    <tr>
-
-        <th>Nom</th>
-        <th>Nombre Trouvé</th>
-        <th>Coup</th>
-
-    </tr>
     <?php
 
-    $stmt = $pdo->prepare("SELECT * FROM users ORDER BY coup");
+    $stmt = $pdo->prepare("SELECT nb, coup FROM users where id=" . $_SESSION['userid']);
     $stmt->execute();
+    $best = $stmt->fetch();
 
-    while($result = $stmt->fetch()){
+    if ($best['nb'] == null && $best['coup'] == null) {
 
-        echo '<tr><td>'.$result["login"].'</td>';
-        echo '<td>'.$result["nb"].'</td>';
-        echo '<td>'.$result["coup"].'</td></tr>';
+        echo 'Pas de meilleur score';
+
+    } else {
+
+        echo $best['nb'] . ' en ' . $best['coup'] . ' coups ! <form method="POST"><input type="submit" name="resetbest" value="Reset Score"></form>';
+
 
     }
 
-    ?>
 
-</table>
+    ?><br><br>
 
-<br><br>
+    <b><u>LeaderBoard :</u></b><br><br>
 
-<form method="POST" action="/index.php">
-    <input type="submit" name="logout" value="Logout">
-</form>
+    <table>
 
+        <tr>
+
+            <th>Nom</th>
+            <th>Nombre Trouvé</th>
+            <th>Coup</th>
+
+        </tr>
+        <?php
+
+        $stmt = $pdo->prepare("SELECT * FROM users ORDER BY coup");
+        $stmt->execute();
+
+        while ($result = $stmt->fetch()) {
+
+            echo '<tr><td>' . $result["login"] . '</td>';
+            echo '<td>' . $result["nb"] . '</td>';
+            echo '<td>' . $result["coup"] . '</td></tr>';
+
+        }
+
+        ?>
+
+    </table>
+
+    <br><br>
+
+    <form method="POST" action="/index.php">
+        <input type="submit" name="logout" value="Logout">
+    </form>
+
+
+</div>
+
+<div id="content2">
+
+    <b><u>Partie précédente :</u></b><br><br>
+
+    <table>
+
+        <tr>
+
+            <th>date</th>
+            <th>Nombre Trouvé</th>
+            <th>Coup</th>
+
+        </tr>
+        <?php
+
+        $stmt = $pdo->prepare("SELECT * FROM histo where userid=" . $_SESSION['userid'] . " ORDER BY date");
+        $stmt->execute();
+
+        while ($result = $stmt->fetch()) {
+
+            echo '<tr><td>' . date('d/m/Y à H\hi', $result["date"]) . '</td>';
+            echo '<td>' . $result["nb"] . '</td>';
+            echo '<td>' . $result["coup"] . '</td></tr>';
+
+        }
+
+        ?>
+
+    </table>
+
+
+</div>
 
 </body>
 </html>
