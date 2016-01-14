@@ -1,9 +1,18 @@
 <?php
 session_start();
 
-if(empty($_SESSION['bol']))
+if(!isset($_SESSION['user'])){
+
+    header("Location: /index.php");
+    exit;
+
+}
+
+if(empty($_SESSION['bol']) || isset($_POST['reset']))
 {
-    $_SESSION['bol'] = mt_rand(1, 100);
+    $_SESSION['bol'] = mt_rand(0, 100);
+    $_SESSION['nombre_envoi'] = 0;
+    $response = "Entrez un nombre pour commencer<br><br>";
 
 }
 
@@ -23,9 +32,9 @@ if(isset($_POST['guess'])){
     }
 }
 
-if(!isset($_POST['guess'])){
+if(!isset($_POST['guess']) || isset($_POST['reset'])){
 
-    $response = "Pas de nombre<br><br>";
+    $response = "Entrez un nombre pour commencer<br><br>";
 
 }
 else{
@@ -96,13 +105,17 @@ else{
 <form method="POST">
 
     <input type="text" name="guess" id="input">
-    <input type="submit">
+    <input type="submit" name="Envoi"><input type="submit" name="reset" value="Reset">
 
 </form>
 
 <br><br>
 
-<b>Meilleur score :</b> <?php echo $_SESSION['nb'].' en '.$_SESSION['coup'].' coups !'; ?>
+Meilleur score pour <b><?php echo $_SESSION['user'];?></b>: <?php echo $_SESSION['nb'].' en '.$_SESSION['coup'].' coups !'; ?><br><br>
+
+<form method="POST" action="/index.php">
+    <input type="submit" name="logout" value="Logout">
+</form>
 
 
 </body>

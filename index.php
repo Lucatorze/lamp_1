@@ -1,27 +1,62 @@
 <?php
+require_once("config/dbconf.php");
+session_start();
 
-$user = "root";
-$pass = "";
+if(isset($_POST['logout'])){
 
-$pdo = new PDO('mysql:host=127.0.0.1;port=3306;dbname=plusoumois', $user, $pass);
-$q = $pdo->prepare('SELECT login, password WHERE login');
+    unset($_SESSION['user']);
 
+}
 
+if(isset($_SESSION['user'])){
 
-if(isset($_POST['login']) && isset($_POST['mdp'])){
+    header("Location: /game.php");
+    exit;
 
-    if($_POST['login'] == $login && $_POST['mdp'] == $mdp){
+}
 
-        header('Location: game.php');
-        exit;
+$errormessage = null;
+
+if(isset($_POST['username'])){
+
+    global $config;
+    $pdo = new PDO($config['host'], $config['user'], $config['password']);
+
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE login = :login");
+
+    $stmt->bindParam("login",$_POST['username']);
+    $stmt->execute();
+    $result = $stmt->fetch();
+
+    $passwordCrypt = sha1($_POST["password"]);
+
+    if($result === false){
+
+        $errormessage = "Wrong username";
+
+    }
+
+    elseif (empty($passwordCrypt)){
+
+        $errormessage = "No Password";
+
+    }
+
+    elseif($passwordCrypt != $result["password"]){
+
+        $errormessage = "Wrong password";
 
     }
 
     else{
 
-        echo 'EeEeeeRRrrrrrrRoOoOoOoOOOrRrRrR !!!!!!!!!!! Les identifiant ne sont pas correct !<br><br>';
-    }
+        $_SESSION['user'] = $result["login"];
+        $_SESSION['nb'] = $result["nb"];
+        $_SESSION['coup'] = $result["coup"];
+        header("Location: /game.php");
+        exit;
 
+    }
 }
 
 ?>
@@ -37,17 +72,17 @@ if(isset($_POST['login']) && isset($_POST['mdp'])){
 <body>
 
 
-<form name="form" method="POST">
+Merci de vous connecter :
 
-    <label for="login">Login : </label>
-    <input type="text" name="login" id="login"><br>
-    <label for="mdp">Mot de passe : </label>
-    <input type="password" name="mdp" id="mdp"><br><br>
+<form method="POST">
 
-    <input type="submit">
-
+    Login : <input type="text" name="username"> <em>(Lucas)</em><br>
+    Password : <input type="password" name="password"> <em>(j'aimelespommes)</em><br>
+    <input type="submit" value="Log in">
 
 </form>
+
+<?php echo $errormessage;?>
 
 </body>
 </html>
