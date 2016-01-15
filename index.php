@@ -75,7 +75,7 @@ if (isset($_POST['username'])) {
 <head>
 
     <meta charset="UTF-8">
-    <title>Plus ou Moins ?</title>
+    <title>Plus ou Moins ? - Login</title>
     <link rel="stylesheet" href="style.css">
 
 </head>
@@ -102,12 +102,7 @@ if (isset($_POST['username'])) {
 
     </form>
 
-    <div class="info">
-        Pour vous connecter en invité, veuillez utiliser ces information :<br><br>
-        Login : Panda<br>
-        Password : carrotes
-
-    </div>
+    <a href="register.php">Se créer un compte</a><br><br>
 
 
 </div>

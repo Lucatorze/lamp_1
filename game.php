@@ -110,7 +110,7 @@ if (isset($_POST['save'])) {
 <head>
 
     <meta charset="UTF-8">
-    <title>Plus ou Moins ?</title>
+    <title>Plus ou Moins ? - Jeux</title>
     <link rel="stylesheet" href="style.css">
 
     <script>
