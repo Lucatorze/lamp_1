@@ -6,6 +6,7 @@ if (isset($_POST['logout'])) {
 
     unset($_SESSION['user']);
     unset($_SESSION['userid']);
+    unset($_SESSION['guess']);
 
 }
 
@@ -58,6 +59,7 @@ if (isset($_POST['username'])) {
             $_SESSION['nb'] = $result["nb"];
             $_SESSION['coup'] = $result["coup"];
             $_SESSION['bol'] = $result["save_rand"];
+            $_SESSION['save_nb'] = $result["save_nb"];
             $_SESSION['nombre_envoi'] = $result["save_coup"];
 
         }

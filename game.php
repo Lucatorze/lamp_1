@@ -33,6 +33,8 @@ if (isset($_POST['resetbest'])) {
 
 if (isset($_POST['guess'])) {
 
+    unset($_SESSION['save_nb']);
+
     if (!isset($_SESSION['nombre_envoi'])) {
 
         $_SESSION['nombre_envoi'] = 0;
@@ -44,13 +46,27 @@ if (isset($_POST['guess'])) {
     }
 }
 
-if (!isset($_POST['guess']) || isset($_POST['reset'])) {
+if (!empty($_SESSION['save_nb'])) {
+
+    $guess = $_SESSION['save_nb'];
+    $response = "Parti reprise ! Vous avez proposé " . $_SESSION['save_nb'] . " et vous en êtes à " . $_SESSION['nombre_envoi'] . " coup !<br><br>";
+
+} elseif (!isset($_POST['guess']) || isset($_POST['reset'])) {
 
     $response = "Entrez un nombre pour commencer<br><br>";
 
 } else {
 
-    $guess = $_POST['guess'];
+    if (empty($_POST['guess'])) {
+
+        $guess = $_POST['guess'];
+
+    } else {
+
+        $guess = $_POST['guess'];
+        $_SESSION['guess'] = $_POST['guess'];
+
+    }
 
     if ($guess > $_SESSION['bol']) {
 
@@ -64,7 +80,7 @@ if (!isset($_POST['guess']) || isset($_POST['reset'])) {
 
         $response = "C'est gagné ! c'est bien le nombre " . $guess . ", vous l'avez trouver en " . $_SESSION['nombre_envoi'] . " propositions !<br><br>";
 
-        $stmt = $pdo->prepare("update users set save_rand=NULL ,save_coup=NULL where id=" . $_SESSION['userid']);
+        $stmt = $pdo->prepare("update users set save_rand=NULL ,save_nb=NULL ,save_coup=NULL where id=" . $_SESSION['userid']);
         $stmt->execute();
 
         $stmt = $pdo->prepare("INSERT INTO histo VALUES('', '" . $_SESSION['userid'] . "', '" . $guess . "', '" . $_SESSION['nombre_envoi'] . "', '" . time() . "')");
@@ -97,8 +113,10 @@ if (isset($_POST['save'])) {
 
     $response = "Partie sauvegardé !<br><br>";
 
-    $stmt = $pdo->prepare("update users set save_rand =" . $_SESSION['bol'] . ",save_coup = " . $_SESSION['nombre_envoi'] . " where id=" . $_SESSION['userid']);
+    $stmt = $pdo->prepare("update users set save_rand = " . $_SESSION['bol'] . ", save_nb = " . $_SESSION['guess'] . ", save_coup = " . $_SESSION['nombre_envoi'] . " where id=" . $_SESSION['userid']);
     $stmt->execute();
+
+    unset($_SESSION['guess']);
 
 }
 
@@ -141,7 +159,7 @@ if (isset($_POST['save'])) {
 
     </div>
 
-    <form method="POST">
+    <form method="POST" name="jeux" onsubmit="return CompleteMessage()">
 
         <input type="text" name="guess" id="input"><br><br>
         <input type="submit" name="Envoi">

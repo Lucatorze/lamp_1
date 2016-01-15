@@ -59,6 +59,7 @@ table {
     margin-left: auto;
     margin-right: auto;
 }
+
 table th {
     border-width: 1px;
     padding: 8px;
@@ -68,9 +69,10 @@ table th {
     color: #ffffff;
 }
 
-table tr:nth-child(even) td{
+table tr:nth-child(even) td {
     background-color: #F7CFCF;
 }
+
 table td {
     border-width: 1px;
     padding: 8px;
@@ -80,51 +82,52 @@ table td {
 }
 
 label {
-    margin-top:10px;
-    display:block;
+    margin-top: 10px;
+    display: block;
 }
+
 label.inline {
-    display:inline;
-    margin-right:50px;
+    display: inline;
+    margin-right: 50px;
 }
 
 input {
-    padding:3px;
-    border:1px solid #F5C5C5;
-    border-radius:5px;
-    width:200px;
-    box-shadow:1px 1px 2px #C0C0C0 inset;
-    background-color:#FFF3F3;
+    padding: 3px;
+    border: 1px solid #F5C5C5;
+    border-radius: 5px;
+    width: 200px;
+    box-shadow: 1px 1px 2px #C0C0C0 inset;
+    background-color: #FFF3F3;
 }
 
-input[type=submit]{
-    width:100px;
-    margin-left:5px;
-    box-shadow:1px 1px 1px #D83F3D;
-    cursor:pointer;
+input[type=submit] {
+    width: 100px;
+    margin-left: 5px;
+    box-shadow: 1px 1px 1px #D83F3D;
+    cursor: pointer;
 }
 
 input:focus {
-    background-color:white;
+    background-color: white;
 }
 
-input[type=submit]:focus{
-    background-color:#FFF3F3;
+input[type=submit]:focus {
+    background-color: #FFF3F3;
 }
 
-input[type=submit]:hover{
-    background-color:#FCDEDE;
+input[type=submit]:hover {
+    background-color: #FCDEDE;
 }
 
-input[type=submit]:active{
-    background-color:#FCDEDE;
-    box-shadow:1px 1px 1px #D83F3D inset;
+input[type=submit]:active {
+    background-color: #FCDEDE;
+    box-shadow: 1px 1px 1px #D83F3D inset;
 }
 
 .info, .error {
     border: 1px solid;
     margin: 10px 0px;
-    padding:15px 10px 15px 50px;
+    padding: 15px 10px 15px 50px;
     background-repeat: no-repeat;
     background-position: 10px center;
 }
@@ -144,5 +147,5 @@ input[type=submit]:active{
 .success {
     color: #4F8A10;
     background-color: #DFF2BF;
-    background-image:url('images/success.png');
+    background-image: url('images/success.png');
 }
