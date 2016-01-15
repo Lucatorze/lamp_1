@@ -110,7 +110,7 @@ if (isset($_POST['save'])) {
 <head>
 
     <meta charset="UTF-8">
-    <title>Des papier dans un bol</title>
+    <title>Plus ou Moins ?</title>
     <link rel="stylesheet" href="style.css">
 
     <script>
@@ -166,7 +166,7 @@ if (isset($_POST['save'])) {
 
     } else {
 
-        echo $best['nb'] . ' en ' . $best['coup'] . ' coups ! <form method="POST"><input type="submit" name="resetbest" value="Reset Score"></form>';
+        echo $best['nb'] . ' en ' . $best['coup'] . ' coups ! <br><br><form method="POST"><input type="submit" name="resetbest" value="Reset Score"></form>';
 
 
     }
@@ -226,7 +226,7 @@ if (isset($_POST['save'])) {
         </tr>
         <?php
 
-        $stmt = $pdo->prepare("SELECT * FROM histo where userid=" . $_SESSION['userid'] . " ORDER BY date");
+        $stmt = $pdo->prepare("SELECT * FROM histo where userid=" . $_SESSION['userid'] . " ORDER BY date DESC");
         $stmt->execute();
 
         while ($result = $stmt->fetch()) {

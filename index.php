@@ -33,15 +33,15 @@ if (isset($_POST['username'])) {
 
     if ($result === false) {
 
-        $errormessage = "Wrong username";
+        $errormessage = "<div class='error'>Pseudo Introuvable !</div>";
 
     } elseif (empty($passwordCrypt)) {
 
-        $errormessage = "No Password";
+        $errormessage = "<div class='error'>Merci d'indiquer votre mot de passe !</div>";
 
     } elseif ($passwordCrypt != $result["password"]) {
 
-        $errormessage = "Wrong password";
+        $errormessage = "<div class='error'>Le mot de passe n'est pas correcte ! </div>";
 
     } else {
 
@@ -75,24 +75,43 @@ if (isset($_POST['username'])) {
 <head>
 
     <meta charset="UTF-8">
-    <title>Des papier dans un bol</title>
+    <title>Plus ou Moins ?</title>
     <link rel="stylesheet" href="style.css">
 
 </head>
 <body>
 
+<div id="header">
 
-Merci de vous connecter :
+    Plus ou Moins ?
 
-<form method="POST">
+</div>
 
-    Login : <input type="text" name="username"> <em>(Lucas)</em><br>
-    Password : <input type="password" name="password"> <em>(j'aimelespommes)</em><br>
-    <input type="submit" value="Log in">
+<div id="content">
 
-</form>
+    <?php echo $errormessage; ?>
 
-<?php echo $errormessage; ?>
+    <form method="POST">
+
+        <label for="username">Login : </label>
+        <input type="text" id="username" name="username"><br>
+
+        <label for="password">Password : </label>
+        <input type="password" id="password" name="password"><br><br>
+        <input type="submit" value="Log in"><br><br>
+
+    </form>
+
+    <div class="info">
+        Pour vous connecter en invité, veuillez utiliser ces information :<br><br>
+        Login : Panda<br>
+        Password : carrotes
+
+    </div>
+
+
+</div>
+
 
 </body>
 </html>
