@@ -35,7 +35,7 @@ if (isset($_POST['guess'])) {
 
     if (!isset($_SESSION['nombre_envoi'])) {
 
-        $_SESSION['nombre_envoi'] = 1;
+        $_SESSION['nombre_envoi'] = 0;
 
     } else {
 
