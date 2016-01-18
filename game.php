@@ -37,7 +37,7 @@ if (isset($_POST['guess'])) {
 
     if (!isset($_SESSION['nombre_envoi'])) {
 
-        $_SESSION['nombre_envoi'] = 0;
+        $_SESSION['nombre_envoi'] = 1;
 
     } else {
 
@@ -85,6 +85,8 @@ if (!empty($_SESSION['save_nb'])) {
 
         $stmt = $pdo->prepare("INSERT INTO histo VALUES('', '" . $_SESSION['userid'] . "', '" . $guess . "', '" . $_SESSION['nombre_envoi'] . "', '" . time() . "')");
         $stmt->execute();
+
+        $_SESSION['coup'] = '';
 
         if ($_SESSION['nombre_envoi'] < $_SESSION['coup'] || empty($_SESSION['coup'])) {
 
@@ -159,10 +161,15 @@ if (isset($_POST['save'])) {
 
     </div>
 
-    <form method="POST" name="jeux" onsubmit="return CompleteMessage()">
+    <form method="POST" name="jeux">
 
         <input type="text" name="guess" id="input"><br><br>
-        <input type="submit" name="Envoi">
+        <input type="submit" name="Envoi"><br><br>
+
+    </form>
+
+    <form method="post">
+
         <input type="submit" name="reset" value="Reset">
         <input type="submit" name="save" value="Sauvegarder">
 
